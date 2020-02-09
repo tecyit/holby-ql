@@ -1,15 +1,20 @@
-import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 import config from "#root/config";
-import typeDefs from '#root/GraphQL/typeDefs'
-import resolvers from "#root/graphql/resolvers";
+import customersRouter from '#root/routes/customers.routes';
  
 const PORT = process.env.PORT || config.PORT;
 
 const app = express();
 
-app.disable("x-powered-by");
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  }),
+);
+
+app.use(bodyParser.json());
 
 app.use( 
   cors({
@@ -18,20 +23,13 @@ app.use(
   })
 );
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: ({ req }) => ({ req }),
-  introspection: true,
-  playground: true
-});
+app.use('/api/v1/customers', customersRouter);
 
-server.applyMiddleware({ app, cors: false });
+app.listen(PORT, () => 
+console.info(` 
+  ################################################
+  🚀 Server Running on Port ${PORT} 🚀
+  ################################################
+`));
 
-app.listen({ port: PORT }, () => {
-  console.info(` 
-  ################################################
-  🚀 Server ready at http://localhost:${PORT}${server.graphqlPath} 🚀
-  ################################################
-  `);
-});
+export default app;
