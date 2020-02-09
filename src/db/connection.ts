@@ -1,14 +1,31 @@
-import { Sequelize } from 'sequelize-typescript';
-import models from './models';
-import config from '../config';
+import mysql from 'mysql';
+import config from '#root/config';
 
-const sequelize = new Sequelize(config.DB_URL, {
-  dialectOptions: {
-    charset: "utf8",
-    multipleStatements: "true"
-  },
-  logging: false,
-  models 
-})
+const connection = mysql.createConnection({
+  host: config.DB_HOST,
+  user: config.DB_USER,
+  password: config.DB_PASS,
+  database: config.DB_NAME
+});
 
-export default sequelize;
+connection.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.info(` 
+  ################################################
+  🚀 Connected to the Database 🚀
+  ################################################
+  `);
+});
+
+export default connection;
+ 
+// connection.connect();
+ 
+// connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+//   if (error) throw error;
+//   console.log('The solution is: ', results[0].solution);
+// });
+ 
+// connection.end();
