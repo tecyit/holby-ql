@@ -1,6 +1,9 @@
 import { Schema, model, Document } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 export interface AdminDoc extends Document {
+	_doc: any;
+	id: string;
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -11,6 +14,7 @@ export interface AdminDoc extends Document {
 	roles: [string];
 	password: string;
 	isVerified: boolean;
+	isSuper: boolean;
 }
 
 const adminSchema = new Schema(
@@ -30,7 +34,7 @@ const adminSchema = new Schema(
 		},
 		gender: {
 			type: String,
-			enum: ["Male", "Female", "Other"]
+			enum: ["male", "female", "other"]
 		},
 		phoneNumber: {
 			type: String,
@@ -59,6 +63,10 @@ const adminSchema = new Schema(
 		isVerified: {
 			type: Boolean,
 			default: false
+		},
+		isSuper: {
+			type: Boolean,
+			default: false
 		}
 	},
 	{
@@ -67,4 +75,6 @@ const adminSchema = new Schema(
 	}
 );
 
-export default model<AdminDoc>("User", adminSchema);
+adminSchema.plugin(mongoosePaginate);
+
+export default model<AdminDoc>("Admin", adminSchema);

@@ -5,6 +5,6 @@ export default {
 		...admin.adminQueries.Query
 	},
 	Mutation: {
-		// ...admin.adminMutations.Mutation
+		...admin.adminMutations.Mutation
 	}
 };

@@ -2,32 +2,39 @@ import { gql } from "apollo-server-express";
 
 export default gql`
 	extend type Query {
-		admin_allAdmins: [Admin]
+		admin_allAdmins(first: Int, offset: Int, search: String): AdminsResult
+	}
+
+	extend type Mutation {
+		# TODO: add directives @auth @publisher
+		admin_signUp(adminSignUpInput: AdminSignUpInput): Admin!
 	}
 
 	type Admin {
-		id: ID!
+		id: ID
 		firstName: String
 		lastName: String
-		email: Email!
+		email: String
+		phoneNumber: String
 		gender: String
 		idNumber: String
 		affiliateCode: String
 		roles: [String]
 		isVerified: Boolean
+		isSuper: Boolean
 	}
-	type Email {
-		emailAddress: String!
-		isVerified: Boolean
+	type AdminsResult {
+		admins: [Admin]
+		totalCount: Int
 	}
 	input AdminSignUpInput {
 		firstName: String!
 		lastName: String!
 		email: String!
 		phoneNumber: String!
+		gender: String!
 		idNumber: String!
-		affiliateCode: String!
-		password: String!
+		roles: [String]
 	}
 	input AdminSignInInput {
 		email: String!

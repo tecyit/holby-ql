@@ -5,6 +5,7 @@ import cors from "cors";
 import config from "./config";
 import typeDefs from "./GraphQL/typeDefs";
 import resolvers from "./GraphQL/resolvers";
+import schemaDirectives from "./GraphQL/directives";
 
 const PORT = process.env.PORT || config.PORT;
 
@@ -24,6 +25,7 @@ const PORT = process.env.PORT || config.PORT;
 		const server = new ApolloServer({
 			typeDefs,
 			resolvers,
+			schemaDirectives,
 			context: ({ req }) => ({ req }),
 			introspection: true,
 			playground: true
